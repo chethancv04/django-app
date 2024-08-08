@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Notifications</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #fedfac, #fefefe);
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        h1 {
+            color: #4CAF50;
+            margin-bottom: 20px;
+            font-size: 48px;
+            font-weight: 600;
+        }
+
+        .notifications {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .notification {
+            background-color: #ffffff;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-left: 6px solid;
+            position: relative;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .notification.pending {
+            border-left-color: #f0ad4e;
+        }
+
+        .notification.approved {
+            border-left-color: #5cb85c;
+        }
+
+        .notification:hover {
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .empty-notifications {
+            background-color: #ffffff;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            color: #777;
+            font-size: 16px;
+        }
+
+        h2 {
+            color: #4CAF50;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Notifications</h1>
+    
+    <div class="notifications">
+        {% if pending_orders %}
+            <h2>Pending Orders</h2>
+            {% for order in pending_orders %}
+                <div class="notification pending">
+                    <p>Your order <strong>#{{ order.id }}</strong> is pending approval.</p>
+                </div>
+            {% endfor %}
+        {% endif %}
+        
+        {% if approved_orders %}
+            <h2>Approved Orders</h2>
+            {% for order in approved_orders %}
+                <div class="notification approved">
+                    <p>Your order <strong>#{{ order.id }}</strong> has been approved.</p>
+                </div>
+            {% endfor %}
+        {% endif %}
+        
+        {% if not pending_orders and not approved_orders %}
+            <div class="empty-notifications">
+                No notifications to display.
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

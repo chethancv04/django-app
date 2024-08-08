@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Products</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #fedfac;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+
+        a.add-product {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 1em;
+            margin-bottom: 20px;
+            transition: background-color 0.3s;
+        }
+
+        a.add-product:hover {
+            background-color: #45a049;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #fff;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        li span:first-child {
+            font-size: 1em;
+            color: #333;
+        }
+
+        li span:last-child {
+            font-size: 1em;
+        }
+
+        li a {
+            color: #4CAF50;
+            text-decoration: none;
+            margin-left: 10px;
+            transition: color 0.3s;
+            font-size: 1.1em; /* Increased font size for better visibility */
+        }
+
+        li a:hover {
+            color: #45a049;
+        }
+
+        li a:first-of-type {
+            margin-left: 0;
+        }
+    </style>
+</head>
+<body>
+    <h2>My Products</h2>
+    <a href="{% url 'add_product' %}" class="add-product">Add New Product</a>
+    <ul>
+        {% for product in products %}
+            <li>
+                <span>{{ product.name }} - ${{ product.price }}</span>
+                <span>
+                    <a href="{% url 'edit_product' product.id %}">Edit</a>
+                    <a href="{% url 'delete_product' product.id %}">Delete</a>
+                </span>
+            </li>
+        {% empty %}
+            <li>No products found.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

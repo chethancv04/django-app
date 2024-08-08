@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    {% load static %}
+    <title>Farm E-Commerce</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fedfac;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-y: scroll;
+        }
+
+        
+        .logo-container img {
+        height: 100px; /* Adjust height as needed */
+        width: auto; /* Keeps the aspect ratio */
+        }
+
+  
+
+
+        h1 {
+            color: #4CAF50;
+            margin: 20px 0;
+            font-family:  "Edu AU VIC WA NT Hand", cursive;
+        }
+
+        nav {
+            width: 100%;
+            background-color: #4CAF50;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-container img {
+            height: 50px; /* Adjust as needed */
+            width: 50px;
+            margin-right: 10px;
+            margin-left: 10px;
+
+        }
+
+        .logo-container span {
+            color: white;
+            font-size: 2.5em;
+            font-family:  "Edu AU VIC WA NT Hand", cursive;
+            font-weight: 400;
+            font-style: normal;
+            font-optical-sizing: auto;
+        }
+
+        nav .nav-links {
+            display: flex;
+            align-items: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            margin: 0 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+            font-family:  "Edu AU VIC WA NT Hand", cursive;
+        }
+
+        nav a:hover {
+            background-color: #45a049;
+        }
+
+        nav .user-info {
+            color: white;
+            margin-left: 40px;
+            margin-right: 10px;
+            font-family:  "Edu AU VIC WA NT Hand", cursive;
+        }
+
+        .auth-links form {
+            display: inline;
+        }
+
+        .auth-links button {
+            background-color: transparent;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin: 0 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-family:  "Edu AU VIC WA NT Hand", cursive;
+        }
+
+        .auth-links button:hover {
+            background-color: #45a049;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Adjust minmax width here */
+            gap: 20px;
+            width: 90%;
+            margin: 20px 0;
+        }
+
+        .product-card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .product-card img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .product-card h2 {
+            color: #333;
+            margin: 10px 0;
+        }
+
+        .product-card p {
+            color: #555;
+            margin: 5px 0;
+        }
+
+        .product-card form {
+            margin: 10px 0;
+        }
+
+        .product-card button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .product-card button:hover {
+            background-color: #45a049;
+        }
+
+        .product-card a {
+            text-decoration: none; /* Remove underline */
+            color: inherit; /* Use the default text color */
+        }
+        
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Edu+AU+VIC+WA+NT+Hand:wght@400..700&family=Indie+Flower&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav>
+        <div class="logo-container">
+            <img src="{% static 'farm.jpg' %}" alt="Logo"> <!-- Replace with your logo image path -->
+            <span>E-Farm </span>
+        </div>
+        <div class="nav-links">
+            <a href="{% url 'home' %}">Home</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'notifications' %}">Notifications</a>
+                {% if user.is_seller %}
+                    <a href="{% url 'seller_dashboard' %}">Seller Dashboard</a>
+                    <a href="{% url 'add_product' %}">Add Product</a>
+                    <a href="{% url 'product_list' %}">Product list</a>
+                {% else %}
+                    <a href="{% url 'users:become_seller' %}">Become a Seller?</a>
+                {% endif %}
+                <a href="{% url 'cart' %}">View Cart</a>
+                <div class="auth-links">
+                    <form action="{% url 'users:logout' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit">Logout</button>
+                    </form>
+                </div>
+            {% else %}
+                <a href="{% url 'users:login' %}">Login</a>
+                <a href="{% url 'users:register' %}">Register</a>
+                <a href="{% url 'users:seller_register' %}">Seller Register</a>
+            {% endif %}
+        </div>
+        {% if user.is_authenticated %}
+            <div class="user-info">
+                <p>Welcome, {{ user.username }}!</p>
+            </div>
+        {% endif %}
+    </nav>
+
+    <h1>Welcome to the Farm E-Commerce Store</h1>
+    <div class="product-grid">
+        {% for product in products %}
+            <div class="product-card">
+                <a href="{% url 'product_detail' product.id %}">
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                    <h2>{{ product.name }}</h2>
+                    <p>{{ product.description }}</p>
+                    <p>Price: {{ product.price }}</p>
+                    <!-- Add to Cart button -->
+                    <form action="{% url 'add_to_cart' product.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit">Add to Cart</button>
+                    </form>
+                    <form action="{% url 'place_order' product.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit">Order</button>
+                    </form>
+                </a>
+            </div>
+        {% endfor %}
+    </div>    
+</body>
+</html>

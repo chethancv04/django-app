@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git 'https://github.com/chethancv04/django-app.git'
+                git branch: 'main', url: 'https://github.com/chethancv04/django-app.git'
             }
         }
 

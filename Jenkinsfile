@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKER_IMAGE = 'chethancv28/django-app:latest'
-        KUBECONFIG = '/var/lib/jenkins/.kube/config'
+        KUBECONFIG = 'C:\\Users\\chethan\\.kube\\config'
     }
 
     stages {
@@ -15,29 +15,29 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t ${DOCKER_IMAGE} .'
+                bat 'docker build -t %DOCKER_IMAGE% .'
             }
         }
 
         stage('Push Docker Image') {
             steps {
                 withDockerRegistry([credentialsId: 'docker-hub-credentials', url: 'https://index.docker.io/v1/']) {
-                    sh 'docker push ${DOCKER_IMAGE}'
+                    bat 'docker push %DOCKER_IMAGE%'
                 }
             }
         }
 
         stage('Deploy to Minikube') {
             steps {
-                sh 'kubectl apply -f deployment.yaml'
-                sh 'kubectl apply -f service.yaml'
+                bat 'kubectl apply -f deployment.yaml'
+                bat 'kubectl apply -f service.yaml'
             }
         }
 
         stage('Verify Deployment') {
             steps {
-                sh 'kubectl get pods'
-                sh 'kubectl get service django-service'
+                bat 'kubectl get pods'
+                bat 'kubectl get service django-service'
             }
         }
     }

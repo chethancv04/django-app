@@ -2,14 +2,14 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'chethancv28/django-app:latest'  // Update with your actual Docker Hub image
+        DOCKER_IMAGE = 'chethancv28/django-app:latest'
         KUBECONFIG = '/var/lib/jenkins/.kube/config'
     }
 
     stages {
         stage('Clone Repository') {
             steps {
-                git 'https://github.com/chethancv04/django-app.git' // Replace with your actual GitHub repo URL
+                git 'https://github.com/chethancv04/django-app.git'
             }
         }
 
@@ -21,7 +21,7 @@ pipeline {
 
         stage('Push Docker Image') {
             steps {
-                withDockerRegistry([credentialsId: 'docker-hub-credentials']) {
+                withDockerRegistry([credentialsId: 'docker-hub-credentials', url: 'https://index.docker.io/v1/']) {
                     sh 'docker push ${DOCKER_IMAGE}'
                 }
             }

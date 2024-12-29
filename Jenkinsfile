@@ -7,7 +7,7 @@ pipeline {
         ANSIBLE_DIR = 'D:\\Farm_ibm\\Farm-Product-E-Commerce\\ansible'  // Full path to your Ansible directory
         ANSIBLE_INVENTORY = 'D:\\Farm_ibm\\Farm-Product-E-Commerce\\ansible\\inventory.yml'  // Full path to your inventory file
         ANSIBLE_PLAYBOOK = 'D:\\Farm_ibm\\Farm-Product-E-Commerce\\ansible\\playbook.yml'  // Full path to your playbook file
-        ANSIBLE_BECOME_PASSWORD = '9019838403Cv*' // Set your sudo password here
+        ANSIBLE_BECOME_PASSWORD = credentials('ansible_sudo_password')  // Referencing the stored password
     }
 
     stages {
@@ -37,10 +37,11 @@ pipeline {
             }
         }
 
+        // Add Ansible Configuration Management Stage
         stage('Configure with Ansible') {
             steps {
                 script {
-                    // Run the Ansible playbook inside WSL without asking for sudo password
+                    // Run the Ansible playbook to apply configuration
                     echo 'Running Ansible playbook...'
                     bat '''wsl ansible-playbook \
                             -i /mnt/d/Farm_ibm/Farm-Product-E-Commerce/ansible/inventory.yml \

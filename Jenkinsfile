@@ -27,6 +27,12 @@ pipeline {
             }
         }
 
+        stage('Run Tests') {
+            steps {
+                bat 'python tests.py'
+            }
+        }
+
         stage('Deploy to Minikube') {
             steps {
                 bat 'kubectl apply -f deployment.yaml'

@@ -7,7 +7,7 @@ pipeline {
         ANSIBLE_DIR = 'D:\\Farm_ibm\\Farm-Product-E-Commerce\\ansible'  // Full path to your Ansible directory
         ANSIBLE_INVENTORY = 'D:\\Farm_ibm\\Farm-Product-E-Commerce\\ansible\\inventory.yml'  // Full path to your inventory file
         ANSIBLE_PLAYBOOK = 'D:\\Farm_ibm\\Farm-Product-E-Commerce\\ansible\\playbook.yml'  // Full path to your playbook file
-        ANSIBLE_BECOME_PASSWORD = 'your_sudo_password_here' // Set your sudo password here
+        ANSIBLE_BECOME_PASSWORD = '9019838403Cv*' // Set your sudo password here
     }
 
     stages {

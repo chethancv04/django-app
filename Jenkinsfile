@@ -4,6 +4,9 @@ pipeline {
     environment {
         DOCKER_IMAGE = 'chethancv28/django-app:latest'
         KUBECONFIG = 'C:\\Users\\chethan\\.kube\\config'
+        ANSIBLE_DIR = 'D:\\Farm_ibm\\Farm-Product-E-Commerce\\ansible'  // Full path to your Ansible directory
+        ANSIBLE_INVENTORY = 'D:\\Farm_ibm\\Farm-Product-E-Commerce\\ansible\\inventory.yml'  // Full path to your inventory file
+        ANSIBLE_PLAYBOOK = 'D:\\Farm_ibm\\Farm-Product-E-Commerce\\ansible\\playbook.yml'  // Full path to your playbook file
     }
 
     stages {
@@ -30,6 +33,16 @@ pipeline {
         stage('Run Tests') {
             steps {
                 bat 'python tests.py'
+            }
+        }
+
+        // Add Ansible Configuration Management Stage
+        stage('Configure with Ansible') {
+            steps {
+                script {
+                    // Run the Ansible playbook to apply configuration
+                    bat 'ansible-playbook -i %ANSIBLE_INVENTORY% %ANSIBLE_PLAYBOOK% --ask-become-pass'
+                }
             }
         }
 

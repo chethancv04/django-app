@@ -15,35 +15,35 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                bat 'docker build -t %DOCKER_IMAGE% .'
+                bat "docker build -t ${DOCKER_IMAGE} ."
             }
         }
 
         stage('Push Docker Image') {
             steps {
                 withDockerRegistry([credentialsId: 'docker-hub-credentials', url: 'https://index.docker.io/v1/']) {
-                    bat 'docker push %DOCKER_IMAGE%'
+                    bat "docker push ${DOCKER_IMAGE}"
                 }
             }
         }
 
         stage('Run Tests') {
             steps {
-                bat 'python tests.py'
+                bat "python tests.py"
             }
         }
 
         stage('Deploy to Minikube') {
             steps {
-                bat 'kubectl apply -f deployment.yaml'
-                bat 'kubectl apply -f service.yaml'
+                bat "kubectl apply -f deployment.yaml"
+                bat "kubectl apply -f service.yaml"
             }
         }
 
         stage('Verify Deployment') {
             steps {
-                bat 'kubectl get pods'
-                bat 'kubectl get service django-service'
+                bat "kubectl get pods"
+                bat "kubectl get service django-service"
             }
         }
     }

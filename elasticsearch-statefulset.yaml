@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: elasticsearch-master-new
+  namespace: logging
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: elasticsearch-master-new
+  template:
+    metadata:
+      labels:
+        app: elasticsearch-master-new
+    spec:
+      initContainers:
+      - name: increase-vm-max-map-count
+        image: busybox:1.27.2
+        command: ["sysctl", "-w", "vm.max_map_count=262144"]
+        securityContext:
+          privileged: true
+      containers:
+      - name: elasticsearch
+        image: docker.elastic.co/elasticsearch/elasticsearch:8.5.1
+        resources:
+          requests:
+            cpu: "500m"
+            memory: 1Gi
+          limits:
+            cpu: "500m"
+            memory: 1Gi
+        volumeMounts:
+        - name: elasticsearch-master-new
+          mountPath: /usr/share/elasticsearch/data
+        env:
+        - name: node.name
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: cluster.initial_master_nodes
+          value: "elasticsearch-master-new-0,elasticsearch-master-new-1,elasticsearch-master-new-2"
+        - name: discovery.seed_hosts
+          value: "elasticsearch-master-new-headless"
+        - name: cluster.name
+          value: elasticsearch
+        - name: ES_JAVA_OPTS
+          value: "-Des.allow_insecure_settings=true -Djava.security.manager=allow"
+  volumeClaimTemplates:
+  - metadata:
+      name: elasticsearch-master-new
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 30Gi

@@ -1,0 +1,20 @@
+---
+- name: Configure Django Application
+  hosts: localhost
+  tasks:
+    - name: Ensure project directory exists
+      file:
+        path: "/mnt/d/Farm_ibm/Farm-Product-E-Commerce"
+        state: directory
+
+    - name: Create a Python virtual environment
+      command: python3 -m venv /mnt/d/Farm_ibm/Farm-Product-E-Commerce/venv
+      args:
+        creates: /mnt/d/Farm_ibm/Farm-Product-E-Commerce/venv
+
+    - name: Install required Python packages in virtual environment
+      shell: |
+        source /mnt/d/Farm_ibm/Farm-Product-E-Commerce/venv/bin/activate
+        pip install django gunicorn
+      args:
+        executable: /bin/bash
